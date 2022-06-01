@@ -68,33 +68,34 @@ class BloxorzSuite extends munit.FunSuite {
       assertEquals(optsolution.length, solution.length)
     }
 
-    test("neighborsWithHistory for level 1") {
-      new Level1 {
-        val actual: Set[(Block, List[Move])] = neighborsWithHistory(Block(Pos(1, 1), Pos(1, 1)), List(Left, Up)).toSet
-        val expected: Set[(Block, List[Move])] = Set(
+  }
+
+  test("neighborsWithHistory for level 1") {
+    new Level1 {
+      val actual: Set[(Block, List[Move])] = neighborsWithHistory(Block(Pos(1, 1), Pos(1, 1)), List(Left, Up)).toSet
+      val expected: Set[(Block, List[Move])] = Set(
+        (Block(Pos(1, 2), Pos(1, 3)), List(Right, Left, Up)),
+        (Block(Pos(2, 1), Pos(3, 1)), List(Down, Left, Up))
+      )
+
+      assertEquals(actual, expected)
+    }
+  }
+
+  test("newNeighborsOnly for level 1") {
+    new Level1 {
+      val actual: LazyList[(Block, List[Move])] = newNeighborsOnly(
+        Set(
           (Block(Pos(1, 2), Pos(1, 3)), List(Right, Left, Up)),
           (Block(Pos(2, 1), Pos(3, 1)), List(Down, Left, Up))
-        )
+        ).to(LazyList),
+        Set(Block(Pos(1, 2), Pos(1, 3)), Block(Pos(1, 1), Pos(1, 1)))
+      )
+      val expected: LazyList[(Block, List[Move])] = Set(
+        (Block(Pos(2, 1), Pos(3, 1)), List(Down, Left, Up))
+      ).to(LazyList)
 
-        assertEquals(actual, expected)
-      }
-    }
-
-    test("newNeighborsOnly for level 1") {
-      new Level1 {
-        val actual: LazyList[(Block, List[Move])] = newNeighborsOnly(
-          Set(
-            (Block(Pos(1, 2), Pos(1, 3)), List(Right, Left, Up)),
-            (Block(Pos(2, 1), Pos(3, 1)), List(Down, Left, Up))
-          ).to(LazyList),
-          Set(Block(Pos(1, 2), Pos(1, 3)), Block(Pos(1, 1), Pos(1, 1)))
-        )
-        val expected: LazyList[(Block, List[Move])] = Set(
-          (Block(Pos(2, 1), Pos(3, 1)), List(Down, Left, Up))
-        ).to(LazyList)
-
-        assertEquals(expected, actual)
-      }
+      assertEquals(expected, actual)
     }
   }
 
